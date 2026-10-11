@@ -1,0 +1,670 @@
+[
+  {
+    "id": "TC001",
+    "title": "Completar la confirmación de pago con sesión válida",
+    "description": "Verifica que la página de éxito con una sesión válida confirme el pago, vacíe el carrito y muestre enlaces de descarga.",
+    "category": "Confirmación de pago",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a template to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Start the checkout flow from the cart"
+      },
+      {
+        "type": "action",
+        "description": "Complete the checkout flow and return to the success page with a valid session"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a payment confirmation is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify download links are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart is empty"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Completar la compra y llegar a la página de éxito",
+    "description": "Verifies that a buyer can start checkout from the cart and, after a successful Stripe Checkout flow, reach the success page with a confirmed payment state.",
+    "category": "Pago con Stripe Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /carrito"
+      },
+      {
+        "type": "action",
+        "description": "Add a template to the cart if needed"
+      },
+      {
+        "type": "action",
+        "description": "Start checkout"
+      },
+      {
+        "type": "action",
+        "description": "Complete the payment flow in Stripe Checkout"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the success page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a payment confirmation message is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Revisar el carrito con artículos guardados",
+    "description": "Verifica que el carrito muestre los artículos guardados, el total y el flujo de revisión antes de pagar.",
+    "category": "Carrito",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a template to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Click the cart link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify cart items are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart total is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Explorar categorías y agregar una plantilla desde el catálogo",
+    "description": "Verifica que un visitante pueda filtrar el catálogo por categoría y agregar una plantilla al carrito desde la vista principal.",
+    "category": "Catálogo y filtro por categoría",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Select a category in the category filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the catalog updates to show only templates from the selected category"
+      },
+      {
+        "type": "action",
+        "description": "Click add to cart on a template card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart counter increases"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Ajustar cantidades y ver el total del carrito",
+    "description": "Verifies that a buyer can change item quantities in the cart and see the total update accordingly.",
+    "category": "Pago con Stripe Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a template to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart"
+      },
+      {
+        "type": "action",
+        "description": "Increase the quantity of the item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart total is updated"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart counter reflects the quantity change"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Cambiar cantidades en el carrito y ver el total actualizado",
+    "description": "Verifica que el usuario pueda ajustar cantidades dentro del rango permitido y que el total se actualice en consecuencia.",
+    "category": "Carrito",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a template to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Click the cart link"
+      },
+      {
+        "type": "action",
+        "description": "Change the quantity of an item to a different valid value"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the item quantity is updated"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart total changes"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Agregar una plantilla al carrito desde el catálogo",
+    "description": "Verifies that a visitor can add a template from the catalog and see the cart state update.",
+    "category": "Pago con Stripe Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Click the add-to-cart control for a template"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart counter updates to reflect the added item"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the added template appears in the cart"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Eliminar artículos hasta vaciar el carrito",
+    "description": "Verifies that a buyer can remove items from the cart and see the empty state when no items remain.",
+    "category": "Pago con Stripe Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a template to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart"
+      },
+      {
+        "type": "action",
+        "description": "Remove the item from the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart is empty"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Eliminar un artículo del carrito",
+    "description": "Verifica que el usuario pueda quitar un artículo del carrito y que el carrito se actualice correctamente.",
+    "category": "Carrito",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a template to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Click the cart link"
+      },
+      {
+        "type": "action",
+        "description": "Remove the item from the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the item is removed from the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart total updates"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Cancelar el pago y conservar el carrito",
+    "description": "Verifies that canceling Stripe Checkout returns the buyer to the canceled page and keeps the cart contents intact.",
+    "category": "Pago con Stripe Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /carrito"
+      },
+      {
+        "type": "action",
+        "description": "Add a template to the cart if needed"
+      },
+      {
+        "type": "action",
+        "description": "Start checkout"
+      },
+      {
+        "type": "action",
+        "description": "Cancel the checkout flow in Stripe"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the canceled page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart contents are still preserved"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Abrir el detalle de una plantilla y agregarla al carrito",
+    "description": "Verifica que un comprador pueda abrir una plantilla válida, revisar su detalle y agregarla al carrito desde esa página.",
+    "category": "Detalle de plantilla",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Open a template detail page from the catalog"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the template detail page is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click add to cart on the template detail page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart counter increases"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Ver una confirmación válida y acceder a las descargas",
+    "description": "Verifies that a valid paid session on the success page shows confirmation, the purchased total, and downloadable files.",
+    "category": "Confirmación de pago",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /exito with a valid paid session identifier"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a payment confirmation message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify downloadable links are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Explorar plantillas por categoría y abrir un detalle",
+    "description": "Verifies that a visitor can filter the catalog by category and open a template detail page from the catalog.",
+    "category": "Pago con Stripe Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Select a category filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify only templates for the selected category are displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click a template card to open its detail page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the template detail page is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Conservar el carrito al cancelar el checkout",
+    "description": "Verifica que cancelar el pago regrese al usuario a la tienda sin perder los artículos del carrito.",
+    "category": "Carrito",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a template to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Start the checkout flow from the cart"
+      },
+      {
+        "type": "action",
+        "description": "Cancel the checkout flow"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart still contains the previously selected item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart counter remains populated"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Agregar una plantilla al carrito desde el detalle",
+    "description": "Verifies that a user can add a template from its detail page and return to a cart that contains the item.",
+    "category": "Pago con Stripe Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Click a template card to open its detail page"
+      },
+      {
+        "type": "action",
+        "description": "Click the add-to-cart control on the detail page"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected template is present in the cart"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Mantener el carrito persistente al navegar entre páginas",
+    "description": "Verifies that cart contents and the cart counter remain available while moving between catalog, detail, and cart pages.",
+    "category": "Pago con Stripe Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a template to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Click a template card to open its detail page"
+      },
+      {
+        "type": "action",
+        "description": "Return to the catalog"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart still contains the previously added item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart counter remains updated"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "Acceder a descargas desde la página de éxito",
+    "description": "Verifica que una compra confirmada muestre enlaces de descarga funcionales desde la página de éxito.",
+    "category": "Confirmación de pago",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Add a template to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Start the checkout flow from the cart"
+      },
+      {
+        "type": "action",
+        "description": "Complete the checkout flow and return to the success page with a valid session"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify download links are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the links correspond to the purchased template files"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC018",
+    "title": "Ver un carrito vacío y continuar deshabilitado",
+    "description": "Verifica que un carrito sin artículos muestre el estado vacío y no permita iniciar el pago.",
+    "category": "Carrito",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /carrito"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty cart message is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the checkout action is disabled"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC019",
+    "title": "Ver el estado vacío del carrito y el pago deshabilitado",
+    "description": "Verifies that an empty cart shows no items and keeps the payment action unavailable.",
+    "category": "Pago con Stripe Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /carrito"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the pay action is disabled"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC020",
+    "title": "Mostrar manejo de sesión inválida en la página de éxito",
+    "description": "Verifica que entrar a la página de éxito sin una sesión válida muestre un estado de error o no confirmado y no presente la confirmación de pago.",
+    "category": "Confirmación de pago",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /exito"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a payment not confirmed state is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify download links are not displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC021",
+    "title": "Ver un estado no confirmado en la página de éxito",
+    "description": "Verifies that the success page shows an unresolved payment state when it cannot confirm a completed purchase session.",
+    "category": "Confirmación de pago",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /exito without a session identifier"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a payment could not be confirmed message is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC022",
+    "title": "Mostrar una página 404 para una plantilla inexistente",
+    "description": "Verifica que visitar un identificador de plantilla inválido muestre una página 404.",
+    "category": "Detalle de plantilla",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to a nonexistent template detail page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a 404 page is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC023",
+    "title": "Abrir un detalle de plantilla inexistente",
+    "description": "Verifies that an invalid template detail route shows a not found state.",
+    "category": "Pago con Stripe Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /plantillas/invalid-id"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a not found state is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC024",
+    "title": "Verify the app health endpoint returns an OK status",
+    "description": "This test verifies that the health check endpoint responds with an OK status for a running application.",
+    "category": "Health check",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /api/health"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a status response is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the status indicates the application is healthy"
+      }
+    ],
+    "priority": "Low"
+  }
+]

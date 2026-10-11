@@ -1,0 +1,90 @@
+import asyncio
+import re
+from playwright import async_api
+from playwright.async_api import expect
+
+async def run_test():
+    pw = None
+    browser = None
+    context = None
+
+    try:
+        # Start a Playwright session in asynchronous mode
+        pw = await async_api.async_playwright().start()
+
+        # Launch a Chromium browser in headless mode with custom arguments
+        browser = await pw.chromium.launch(
+            headless=True,
+            args=[
+                "--window-size=1280,720",
+                "--disable-dev-shm-usage",
+                "--ipc=host",
+                "--single-process"
+            ],
+        )
+
+        # Create a new browser context (like an incognito window)
+        context = await browser.new_context()
+        # Wider default timeout to match the agent's DOM-stability budget;
+        # auto-waiting Playwright APIs (expect, locator.wait_for) inherit this.
+        context.set_default_timeout(15000)
+
+        # Open a new page in the browser context
+        page = await context.new_page()
+
+        # Interact with the page elements to simulate user flow
+        # -> navigate
+        await page.goto("http://localhost:3002")
+        try:
+            await page.wait_for_load_state("domcontentloaded", timeout=5000)
+        except Exception:
+            pass
+        
+        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview', then open the 'Carrito' (Cart) page.
+        # Agregar al carrito button
+        elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview', then open the 'Carrito' (Cart) page.
+        # Carrito ( 0 ) link
+        elem = page.get_by_role("link", name="Carrito, 1 artículos")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Pagar con Stripe' button to start the checkout flow
+        # Pagar con Stripe button
+        elem = page.get_by_test_id("btn-pagar")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Back to Tienda de Plantillas SRE sandbox' link to cancel checkout and return to the store.
+        # Back Tienda de Plantillas SRE sandbox link
+        elem = page.get_by_test_id("business-link")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Volver al carrito' button to return to the cart and verify the item and cart counter are still present.
+        # Volver al carrito link
+        elem = page.get_by_role("link", name="Volver al carrito")
+        await elem.click(timeout=10000)
+        
+        # --> Assertions to verify final state
+        
+        # --> El carrito muestra el artículo 'Kubernetes Cluster Overview'.
+        # Assert-outcome: passed
+        # Assert: The cart displays the product title 'Kubernetes Cluster Overview'.
+        await expect(page.get_by_test_id("item-carrito").get_by_role("link").nth(0)).to_have_text("Kubernetes Cluster Overview", timeout=15000), "The cart displays the product title 'Kubernetes Cluster Overview'."
+        
+        # --> El contador del encabezado mantiene el indicador de carrito con 1 artículo.
+        # Assert-outcome: passed
+        # Assert: The header cart link's aria-label shows 'Carrito, 1 artículos'.
+        await expect(page.get_by_role("link", name="Carrito, 1 artículos").nth(0)).to_have_attribute("aria-label", "Carrito, 1 art\u00edculos", timeout=15000), "The header cart link's aria-label shows 'Carrito, 1 art\u00edculos'."
+        await asyncio.sleep(5)
+
+    finally:
+        if context:
+            await context.close()
+        if browser:
+            await browser.close()
+        if pw:
+            await pw.stop()
+
+asyncio.run(run_test())
+    
