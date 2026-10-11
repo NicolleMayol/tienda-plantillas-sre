@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { VaciarCarrito } from "@/components/VaciarCarrito";
 import { obtenerPlantilla } from "@/data/plantillas";
-import { formatearPrecio, type ItemCarrito } from "@/lib/carrito";
+import { formatearPrecio } from "@/lib/carrito";
+import { plantillasCompradas } from "@/lib/descargas";
 import { getStripe } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
@@ -20,27 +21,6 @@ function MensajeError() {
       </Link>
     </section>
   );
-}
-
-function parsearPlantillas(metadata: string | null | undefined): ItemCarrito[] {
-  if (!metadata) {
-    return [];
-  }
-  try {
-    const parsed: unknown = JSON.parse(metadata);
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-    return parsed.filter(
-      (item): item is ItemCarrito =>
-        item !== null &&
-        typeof item === "object" &&
-        typeof item.id === "string" &&
-        typeof item.cantidad === "number",
-    );
-  } catch {
-    return [];
-  }
 }
 
 export default async function ExitoPage({
@@ -62,7 +42,7 @@ export default async function ExitoPage({
       return <MensajeError />;
     }
 
-    const compradas = parsearPlantillas(session.metadata?.plantillas);
+    const compradas = plantillasCompradas(session.metadata?.plantillas);
     const total = session.amount_total ?? 0;
 
     return (
@@ -81,7 +61,7 @@ export default async function ExitoPage({
             return (
               <li key={plantilla.id}>
                 <a
-                  href={`/plantillas/${plantilla.archivo}`}
+                  href={`/api/descargas/${plantilla.id}?session_id=${encodeURIComponent(sessionId)}`}
                   download
                   className="text-emerald-300 underline"
                 >

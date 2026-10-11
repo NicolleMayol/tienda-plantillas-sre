@@ -40,77 +40,74 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Agregar Kubernetes Cluster Overview al carrito' button and then click the 'Carrito' link to open the cart page.
+        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview', then open the 'Carrito' page.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Agregar Kubernetes Cluster Overview al carrito' button and then click the 'Carrito' link to open the cart page.
+        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview', then open the 'Carrito' page.
         # Carrito ( 0 ) link
         elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Pagar con Stripe' button to open the Stripe Checkout page.
+        # -> Click the 'Pagar con Stripe' button to open the hosted Stripe Checkout page.
         # Pagar con Stripe button
         elem = page.get_by_test_id("btn-pagar")
         await elem.click(timeout=10000)
         
-        # -> Fill the 'Email' and card fields on the Stripe Checkout page and click the 'Pay' button.
+        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiration '12/34', CVC '123', and cardholder name 'Test User'.
         # email@example.com text field
         elem = page.get_by_role("textbox", name="Email")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("test@example.com")
         
-        # -> Fill the 'Email' and card fields on the Stripe Checkout page and click the 'Pay' button.
+        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiration '12/34', CVC '123', and cardholder name 'Test User'.
         # Card number text field
         elem = page.get_by_role("textbox", name="Card number")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("4242 4242 4242 4242")
         
-        # -> Fill the 'Email' and card fields on the Stripe Checkout page and click the 'Pay' button.
+        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiration '12/34', CVC '123', and cardholder name 'Test User'.
         # Expiration text field
         elem = page.get_by_role("textbox", name="Expiration")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("12 / 34")
+        await elem.fill("12/34")
         
-        # -> Fill the 'Email' and card fields on the Stripe Checkout page and click the 'Pay' button.
+        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiration '12/34', CVC '123', and cardholder name 'Test User'.
         # Credit or debit card CVC/CVV text field
         elem = page.get_by_role("textbox", name="Credit or debit card CVC/CVV")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("123")
         
-        # -> Fill the 'Email' and card fields on the Stripe Checkout page and click the 'Pay' button.
-        # Pay Processing button
-        elem = page.get_by_test_id("hosted-payment-submit-button")
-        await elem.click(timeout=10000)
-        
-        # -> Fill the 'Cardholder name' field with 'Test User' and click the 'Pay' button to submit the payment.
+        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiration '12/34', CVC '123', and cardholder name 'Test User'.
         # Full name on card text field
         elem = page.get_by_role("textbox", name="Cardholder name")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("Test User")
         
-        # -> Fill the 'Cardholder name' field with 'Test User' and click the 'Pay' button to submit the payment.
+        # -> Click the 'Pay' button to submit the Stripe Checkout payment.
         # Pay Processing button
         elem = page.get_by_test_id("hosted-payment-submit-button")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Carrito' link (accessible name 'Carrito, 0 artículos') to open the cart and verify the cart counter shows '(0)'.
-        # Carrito ( 0 ) link
-        elem = page.get_by_role("link", name="Carrito, 0 artículos")
-        await elem.click(timeout=10000)
+        # -> Open the Cart page ('Carrito') and verify the cart counter shows '(0)'.
+        await page.goto("http://localhost:3002/carrito")
+        try:
+            await page.wait_for_load_state("domcontentloaded", timeout=5000)
+        except Exception:
+            pass
         
         # --> Assertions to verify final state
         
-        # --> The browser reached the merchant success page: the URL contains the /exito?session_id= fragment.
+        # --> The app redirected to a URL containing '/exito?session_id=' after completing checkout.
         # Assert-outcome: passed
-        # Assert: The current URL contains the /exito?session_id= fragment.
-        await expect(page).to_have_url(re.compile("/exito\\?session_id="), timeout=15000), "The current URL contains the /exito?session_id= fragment."
+        # Assert: Verifies the browser was redirected to the success URL with a session_id parameter.
+        await expect(page).to_have_url(re.compile("/exito\\?session_id="), timeout=15000), "Verifies the browser was redirected to the success URL with a session_id parameter."
         
-        # --> The header cart control shows zero items (accessible name 'Carrito, 0 artículos').
+        # --> After returning to /carrito the header cart counter shows zero items ('Carrito (0)').
         # Assert-outcome: passed
-        # Assert: The header cart accessible name indicates 0 items.
-        await expect(page.get_by_role("link", name="Carrito, 0 artículos").nth(0)).to_have_attribute("aria-label", "Carrito, 0 art\u00edculos", timeout=15000), "The header cart accessible name indicates 0 items."
+        # Assert: Verifies the header cart aria-label indicates there are 0 items in the cart.
+        await expect(page.get_by_role("link", name="Carrito, 0 artículos").nth(0)).to_have_attribute("aria-label", "Carrito, 0 art\u00edculos", timeout=15000), "Verifies the header cart aria-label indicates there are 0 items in the cart."
         await asyncio.sleep(5)
 
     finally:

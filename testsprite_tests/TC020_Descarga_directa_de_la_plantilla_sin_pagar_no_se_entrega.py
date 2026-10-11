@@ -40,7 +40,7 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the JSON file URL http://localhost:3002/plantillas/kubernetes-cluster-overview.json and verify the response does not return the Grafana dashboard JSON.
+        # -> Open the direct URL /plantillas/kubernetes-cluster-overview.json and check whether the server returns the template JSON or a blocked/404/403 response.
         await page.goto("http://localhost:3002/plantillas/kubernetes-cluster-overview.json")
         try:
             await page.wait_for_load_state("domcontentloaded", timeout=5000)
@@ -48,9 +48,12 @@ async def run_test():
             pass
         
         # --> Assertions to verify final state
-        # Assert-outcome: failed
-        # Assert: reproduce the recorded failure (no generated assertion fails on the final page)
-        assert False, "Test failed during execution: see the run log"
+        
+        # --> Requesting /plantillas/kubernetes-cluster-overview.json returned the storefront 'Página no encontrada' page instead of raw JSON.
+        await page.get_by_role("link", name="Volver al catálogo").nth(0).scroll_into_view_if_needed()
+        # Assert-outcome: passed
+        # Assert: The page displays a 'Volver al catálogo' link, indicating HTML not a raw JSON response.
+        await expect(page.get_by_role("link", name="Volver al catálogo").nth(0)).to_be_visible(timeout=15000), "The page displays a 'Volver al cat\u00e1logo' link, indicating HTML not a raw JSON response."
         await asyncio.sleep(5)
 
     finally:

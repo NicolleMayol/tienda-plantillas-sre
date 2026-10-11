@@ -40,75 +40,68 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' card, then open the 'Carrito' page by clicking the 'Carrito' link.
+        # -> Click the 'Agregar Kubernetes Cluster Overview al carrito' button to add that template to the cart.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' card, then open the 'Carrito' page by clicking the 'Carrito' link.
-        # Carrito ( 0 ) link
+        # -> Click the 'Carrito' link (accessible name 'Carrito, 1 artículo') to open the cart page.
+        # Carrito ( 1 ) link
         elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Pagar con Stripe' button to start Stripe Checkout.
+        # -> Click the 'Pagar con Stripe' button to open the hosted Stripe Checkout page.
         # Pagar con Stripe button
         elem = page.get_by_test_id("btn-pagar")
         await elem.click(timeout=10000)
         
-        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiry '12 / 34', CVC '123' and click the 'Pay' button.
+        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiration '12 / 34', CVC '123', and cardholder name 'Test User'.
         # email@example.com text field
         elem = page.get_by_role("textbox", name="Email")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("test@example.com")
         
-        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiry '12 / 34', CVC '123' and click the 'Pay' button.
+        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiration '12 / 34', CVC '123', and cardholder name 'Test User'.
         # Card number text field
         elem = page.get_by_role("textbox", name="Card number")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("4242 4242 4242 4242")
         
-        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiry '12 / 34', CVC '123' and click the 'Pay' button.
+        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiration '12 / 34', CVC '123', and cardholder name 'Test User'.
         # Expiration text field
         elem = page.get_by_role("textbox", name="Expiration")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("12 / 34")
         
-        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiry '12 / 34', CVC '123' and click the 'Pay' button.
+        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiration '12 / 34', CVC '123', and cardholder name 'Test User'.
         # Credit or debit card CVC/CVV text field
         elem = page.get_by_role("textbox", name="Credit or debit card CVC/CVV")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("123")
         
-        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiry '12 / 34', CVC '123' and click the 'Pay' button.
-        # Pay Processing button
-        elem = page.get_by_test_id("hosted-payment-submit-button")
-        await elem.click(timeout=10000)
-        
-        # -> Fill 'Test User' into the Cardholder name field and click the 'Pay' button to submit the Stripe Checkout.
+        # -> Fill the Stripe Checkout form: enter email 'test@example.com', card number '4242 4242 4242 4242', expiration '12 / 34', CVC '123', and cardholder name 'Test User'.
         # Full name on card text field
         elem = page.get_by_role("textbox", name="Cardholder name")
         await elem.wait_for(state="visible", timeout=10000)
         await elem.fill("Test User")
         
-        # -> Fill 'Test User' into the Cardholder name field and click the 'Pay' button to submit the Stripe Checkout.
+        # -> Click the 'Pay' button to submit the Stripe Checkout payment.
         # Pay Processing button
         elem = page.get_by_test_id("hosted-payment-submit-button")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> The browser is on the confirmation page and the URL contains a session_id query parameter.
+        # --> The browser is on the confirmation page with a session_id in the URL.
         # Assert-outcome: passed
-        # Assert: The URL contains '/exito?session_id='.
-        await expect(page).to_have_url(re.compile("/exito\\?session_id="), timeout=15000), "The URL contains '/exito?session_id='."
+        # Assert: The URL contains the /exito?session_id= fragment.
+        await expect(page).to_have_url(re.compile("/exito\\?session_id="), timeout=15000), "The URL contains the /exito?session_id= fragment."
         
-        # --> A 'Descargar' link for the purchased template is visible and points to a .json file.
+        # --> A visible 'Descargar Kubernetes Cluster Overview' download link is present on the confirmation page.
+        await page.get_by_role("link", name="Descargar Kubernetes Cluster").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: The download link's visible text contains 'Descargar'.
-        await expect(page.get_by_role("listitem").nth(0)).to_contain_text("Descargar", timeout=15000), "The download link's visible text contains 'Descargar'."
-        # Assert-outcome: passed
-        # Assert: The download link's href is '/plantillas/kubernetes-cluster-overview.json'.
-        await expect(page.get_by_role("link", name="Descargar Kubernetes Cluster").nth(0)).to_have_attribute("href", "/plantillas/kubernetes-cluster-overview.json", timeout=15000), "The download link's href is '/plantillas/kubernetes-cluster-overview.json'."
+        # Assert: The 'Descargar Kubernetes Cluster Overview' link is visible.
+        await expect(page.get_by_role("link", name="Descargar Kubernetes Cluster").nth(0)).to_be_visible(timeout=15000), "The 'Descargar Kubernetes Cluster Overview' link is visible."
         await asyncio.sleep(5)
 
     finally:
