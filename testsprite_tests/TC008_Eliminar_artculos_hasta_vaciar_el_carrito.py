@@ -40,27 +40,30 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Agregar al carrito' button for the 'Kubernetes Cluster Overview' product to add it to the cart.
+        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' product, then click the 'Carrito' button in the header to open the cart.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
-        # -> Open the cart by clicking the 'Carrito' button in the top-right to view cart contents.
-        # Carrito ( 1 ) link
-        elem = page.get_by_role("link", name="Carrito, 1 artículos")
+        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' product, then click the 'Carrito' button in the header to open the cart.
+        # Carrito ( 0 ) link
+        elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Quitar' (Remove) button for 'Kubernetes Cluster Overview' in the cart to remove the item.
+        # -> Click the 'Quitar' button on the 'Kubernetes Cluster Overview' cart item to remove it.
         # Quitar button
         elem = page.get_by_test_id("btn-quitar")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> The cart is empty and the empty-state message 'Tu carrito está vacío' is shown.
+        # --> The cart is empty and shows the empty-state message 'Tu carrito está vacío'.
         # Assert-outcome: passed
-        # Assert: Header cart indicator shows zero items ('Carrito, 0 artículos').
-        await expect(page.get_by_role("link", name="Carrito, 0 artículos").nth(0)).to_have_attribute("aria-label", "Carrito, 0 art\u00edculos", timeout=15000), "Header cart indicator shows zero items ('Carrito, 0 art\u00edculos')."
+        # Assert: Header cart indicator shows 0 items.
+        await expect(page.get_by_label("Carrito, 0 artículos").nth(0)).to_contain_text("0", timeout=15000), "Header cart indicator shows 0 items."
+        # Assert-outcome: passed
+        # Assert: The checkout button labeled 'Pagar con Stripe' is present on the cart page.
+        await expect(page.get_by_test_id("btn-pagar").nth(0)).to_have_text("Pagar con Stripe", timeout=15000), "The checkout button labeled 'Pagar con Stripe' is present on the cart page."
         await asyncio.sleep(5)
 
     finally:

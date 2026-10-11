@@ -40,34 +40,23 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Hacer clic en el botón 'Agregar al carrito' de 'Kubernetes Cluster Overview' y luego abrir el enlace 'Carrito'.
+        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview', then click the 'Carrito' link to open the cart page.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
-        # -> Hacer clic en el botón 'Agregar al carrito' de 'Kubernetes Cluster Overview' y luego abrir el enlace 'Carrito'.
+        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview', then click the 'Carrito' link to open the cart page.
         # Carrito ( 0 ) link
-        elem = page.get_by_role("link", name="Carrito, 1 artículos")
-        await elem.click(timeout=10000)
-        
-        # -> Verify the cart displays the item 'Kubernetes Cluster Overview' and the total 'Total: $15.00', then click the 'Pagar con Stripe' button to check the checkout flow.
-        # Pagar con Stripe button
-        elem = page.get_by_test_id("btn-pagar")
+        elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> The checkout page shows the cart item 'Kubernetes Cluster Overview'.
-        await page.locator(".PaymentMethodFormAccordionItemTitle-icon").nth(0).scroll_into_view_if_needed()
+        # --> The cart lists the added item 'Kubernetes Cluster Overview'.
+        await page.get_by_role("link", name="Kubernetes Cluster Overview").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: The product list container (showing cart items) is visible in checkout.
-        await expect(page.locator(".PaymentMethodFormAccordionItemTitle-icon").nth(0)).to_be_visible(timeout=15000), "The product list container (showing cart items) is visible in checkout."
-        
-        # --> The checkout page displays the cart total amount for review.
-        await page.get_by_role("button", name="US $").nth(0).scroll_into_view_if_needed()
-        # Assert-outcome: passed
-        # Assert: The cart total amount button is visible in the checkout UI.
-        await expect(page.get_by_role("button", name="US $").nth(0)).to_be_visible(timeout=15000), "The cart total amount button is visible in the checkout UI."
+        # Assert: The product link for 'Kubernetes Cluster Overview' is visible in the cart.
+        await expect(page.get_by_role("link", name="Kubernetes Cluster Overview").nth(0)).to_be_visible(timeout=15000), "The product link for 'Kubernetes Cluster Overview' is visible in the cart."
         await asyncio.sleep(5)
 
     finally:

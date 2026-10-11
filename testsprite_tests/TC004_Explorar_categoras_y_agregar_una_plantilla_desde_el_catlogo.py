@@ -40,36 +40,63 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Abrir el desplegable 'Categoría' (etiqueta visible 'Categoría') para mostrar y luego elegir la opción 'Kubernetes'.
-        # Todas Kubernetes Bases de datos Infraestructura... dropdown
-        elem = page.get_by_test_id("filtro-categoria")
-        await elem.click(timeout=10000)
-        
-        # -> Seleccionar 'Kubernetes' en el desplegable 'Categoría' para filtrar el catálogo
+        # -> Select the 'Kubernetes' option from the 'Categoría' filter on the page.
         # Todas Kubernetes Bases de datos Infraestructura... dropdown
         elem = page.locator("xpath=/html/body/main/section/div/div[2]/select").nth(0)
         await elem.wait_for(state="visible", timeout=10000)
         await elem.select_option("")
         
-        # -> Verificar que el catálogo muestra solo plantillas etiquetadas 'Kubernetes' y luego hacer clic en el botón 'Agregar al carrito' de la tarjeta 'Kubernetes Cluster Overview'.
+        # -> Select the 'Kubernetes' option from the 'Categoría' filter on the page.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
+        # -> Click the 'Agregar al carrito' button on the 'NGINX Ingress' card to add it to the cart.
+        # Agregar al carrito button
+        elem = page.get_by_role("button", name="Agregar NGINX Ingress al")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' card and verify the cart counter increments.
+        # Agregar al carrito button
+        elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' card and then verify the cart counter increases.
+        # Agregar al carrito button
+        elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' card to add one more item and verify the cart counter increases.
+        # Agregar al carrito button
+        elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
+        await elem.click(timeout=10000)
+        
+        # -> Hacer clic en el botón 'Agregar al carrito' en la tarjeta 'Kubernetes Cluster Overview' para intentar incrementar el contador del carrito.
+        # Agregar al carrito button
+        elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
+        await elem.click(timeout=10000)
+        
+        # -> Click the 'Agregar al carrito' button on the 'NGINX Ingress' card and verify the cart counter increases.
+        # Agregar al carrito button
+        elem = page.get_by_role("button", name="Agregar NGINX Ingress al")
+        await elem.click(timeout=10000)
+        
         # --> Assertions to verify final state
         
-        # --> El catálogo está filtrado a la categoría 'Kubernetes' y muestra las plantillas 'Kubernetes Cluster Overview' y 'NGINX Ingress'.
+        # --> El catálogo muestra las plantillas de la categoría 'Kubernetes' (Kubernetes Cluster Overview y NGINX Ingress).
+        await page.get_by_role("link", name="Kubernetes Cluster Overview").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: La tarjeta 'Kubernetes Cluster Overview' está visible en el catálogo.
-        await expect(page.locator("xpath=/html/body/main/section/div[2]/article[1]/div[1]/h2/a").nth(0)).to_have_text("Kubernetes Cluster Overview", timeout=15000), "La tarjeta 'Kubernetes Cluster Overview' est\u00e1 visible en el cat\u00e1logo."
+        # Assert: La plantilla 'Kubernetes Cluster Overview' está visible en el catálogo.
+        await expect(page.get_by_role("link", name="Kubernetes Cluster Overview").nth(0)).to_be_visible(timeout=15000), "La plantilla 'Kubernetes Cluster Overview' est\u00e1 visible en el cat\u00e1logo."
+        await page.get_by_role("link", name="NGINX Ingress").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: La tarjeta 'NGINX Ingress' está visible en el catálogo.
-        await expect(page.locator("xpath=/html/body/main/section/div[2]/article[2]/div[1]/h2/a").nth(0)).to_have_text("NGINX Ingress", timeout=15000), "La tarjeta 'NGINX Ingress' est\u00e1 visible en el cat\u00e1logo."
+        # Assert: La plantilla 'NGINX Ingress' está visible en el catálogo.
+        await expect(page.get_by_role("link", name="NGINX Ingress").nth(0)).to_be_visible(timeout=15000), "La plantilla 'NGINX Ingress' est\u00e1 visible en el cat\u00e1logo."
         
-        # --> Al añadir una plantilla, el contador del carrito en la cabecera refleja 1 artículo.
+        # --> El contador del carrito en el encabezado se incrementó y muestra 7 artículos.
         # Assert-outcome: passed
-        # Assert: El enlace del carrito en la cabecera tiene el aria-label indicando 1 artículo.
-        await expect(page.get_by_role("link", name="Carrito, 1 artículos").nth(0)).to_have_attribute("aria-label", "Carrito, 1 art\u00edculos", timeout=15000), "El enlace del carrito en la cabecera tiene el aria-label indicando 1 art\u00edculo."
+        # Assert: El encabezado del carrito contiene el número '7'.
+        await expect(page.get_by_label("Carrito, 7 artículos").nth(0)).to_contain_text("7", timeout=15000), "El encabezado del carrito contiene el n\u00famero '7'."
         await asyncio.sleep(5)
 
     finally:

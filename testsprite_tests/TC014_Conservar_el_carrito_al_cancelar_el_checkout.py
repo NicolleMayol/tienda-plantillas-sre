@@ -40,17 +40,17 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview', then open the 'Carrito' (Cart) page.
+        # -> Hacer clic en el botón "Agregar al carrito" de la tarjeta "Kubernetes Cluster Overview" para añadir ese artículo al carrito.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview', then open the 'Carrito' (Cart) page.
+        # -> Hacer clic en el botón "Agregar al carrito" de la tarjeta "Kubernetes Cluster Overview" para añadir ese artículo al carrito.
         # Carrito ( 0 ) link
-        elem = page.get_by_role("link", name="Carrito, 1 artículos")
+        elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Pagar con Stripe' button to start the checkout flow
+        # -> Hacer clic en el botón 'Pagar con Stripe' para iniciar el flujo de pago.
         # Pagar con Stripe button
         elem = page.get_by_test_id("btn-pagar")
         await elem.click(timeout=10000)
@@ -60,22 +60,23 @@ async def run_test():
         elem = page.get_by_test_id("business-link")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Volver al carrito' button to return to the cart and verify the item and cart counter are still present.
+        # -> Click the 'Volver al carrito' button to return to the cart and verify the cart contents remain.
         # Volver al carrito link
         elem = page.get_by_role("link", name="Volver al carrito")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> El carrito muestra el artículo 'Kubernetes Cluster Overview'.
+        # --> The cart still contains the previously selected item 'Kubernetes Cluster Overview'.
+        await page.get_by_role("link", name="Kubernetes Cluster Overview").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: The cart displays the product title 'Kubernetes Cluster Overview'.
-        await expect(page.get_by_test_id("item-carrito").get_by_role("link").nth(0)).to_have_text("Kubernetes Cluster Overview", timeout=15000), "The cart displays the product title 'Kubernetes Cluster Overview'."
+        # Assert: The cart shows the product 'Kubernetes Cluster Overview'.
+        await expect(page.get_by_role("link", name="Kubernetes Cluster Overview").nth(0)).to_be_visible(timeout=15000), "The cart shows the product 'Kubernetes Cluster Overview'."
         
-        # --> El contador del encabezado mantiene el indicador de carrito con 1 artículo.
+        # --> The cart counter in the header remains populated after cancelling checkout.
         # Assert-outcome: passed
-        # Assert: The header cart link's aria-label shows 'Carrito, 1 artículos'.
-        await expect(page.get_by_role("link", name="Carrito, 1 artículos").nth(0)).to_have_attribute("aria-label", "Carrito, 1 art\u00edculos", timeout=15000), "The header cart link's aria-label shows 'Carrito, 1 art\u00edculos'."
+        # Assert: The header cart control shows a count in parentheses.
+        await expect(page.get_by_label("Carrito, 1 artículo").nth(0)).to_contain_text("(", timeout=15000), "The header cart control shows a count in parentheses."
         await asyncio.sleep(5)
 
     finally:

@@ -40,28 +40,27 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Abrir la página de detalle de la plantilla 'Kubernetes Cluster Overview' desde el catálogo.
+        # -> Click the 'Kubernetes Cluster Overview' link to open its template detail page.
         # Kubernetes Cluster Overview link
         elem = page.get_by_role("link", name="Kubernetes Cluster Overview")
         await elem.click(timeout=10000)
         
-        # -> Hacer clic en el botón 'Agregar al carrito' en la página de detalle de la plantilla.
+        # -> Click the 'Agregar al carrito' button on the template detail page to add the item to the cart.
         # Agregar al carrito button
         elem = page.get_by_test_id("btn-agregar")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> La página de detalle de la plantilla 'Kubernetes Cluster Overview' está visible.
-        await page.get_by_test_id("btn-agregar").nth(0).scroll_into_view_if_needed()
+        # --> La página de detalle de la plantilla muestra el botón 'Agregar al carrito'.
         # Assert-outcome: passed
-        # Assert: El botón 'Agregar al carrito' en la página de detalle está visible.
-        await expect(page.get_by_test_id("btn-agregar").nth(0)).to_be_visible(timeout=15000), "El bot\u00f3n 'Agregar al carrito' en la p\u00e1gina de detalle est\u00e1 visible."
+        # Assert: El botón de la página está etiquetado 'Agregar al carrito'.
+        await expect(page.get_by_test_id("btn-agregar").nth(0)).to_have_text("Agregar al carrito", timeout=15000), "El bot\u00f3n de la p\u00e1gina est\u00e1 etiquetado 'Agregar al carrito'."
         
-        # --> El contador del carrito en el encabezado muestra 1 artículo tras añadir la plantilla.
+        # --> El contador del carrito se actualizó y muestra 1 artículo.
         # Assert-outcome: passed
-        # Assert: El encabezado del carrito muestra el número de artículos '1'.
-        await expect(page.get_by_label("Carrito, 1 artículos").nth(0)).to_contain_text("1", timeout=15000), "El encabezado del carrito muestra el n\u00famero de art\u00edculos '1'."
+        # Assert: El indicador del carrito muestra 'Carrito, 1 artículo' en su aria-label.
+        await expect(page.get_by_role("link", name="Carrito, 1 artículo").nth(0)).to_have_attribute("aria-label", "Carrito, 1 art\u00edculo", timeout=15000), "El indicador del carrito muestra 'Carrito, 1 art\u00edculo' en su aria-label."
         await asyncio.sleep(5)
 
     finally:

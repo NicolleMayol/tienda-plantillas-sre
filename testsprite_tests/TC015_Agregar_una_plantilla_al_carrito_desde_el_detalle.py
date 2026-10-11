@@ -40,27 +40,27 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Kubernetes Cluster Overview' template card to open its detail page.
+        # -> Click the 'Kubernetes Cluster Overview' template title to open its detail page.
         # Kubernetes Cluster Overview link
         elem = page.get_by_role("link", name="Kubernetes Cluster Overview")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Agregar al carrito' button on the template detail page, then open the 'Carrito' (cart) link to view cart contents.
+        # -> Click the 'Agregar al carrito' button to add the template to the cart, then open the 'Carrito' link to verify the item is present.
         # Agregar al carrito button
         elem = page.get_by_test_id("btn-agregar")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Agregar al carrito' button on the template detail page, then open the 'Carrito' (cart) link to view cart contents.
+        # -> Click the 'Agregar al carrito' button to add the template to the cart, then open the 'Carrito' link to verify the item is present.
         # Carrito ( 0 ) link
-        elem = page.get_by_role("link", name="Carrito, 1 artículos")
+        elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> The 'Kubernetes Cluster Overview' template is present in the cart.
+        # --> The cart lists the added template titled 'Kubernetes Cluster Overview'.
         # Assert-outcome: passed
-        # Assert: Verifies the template title appears in the cart.
-        await expect(page.get_by_test_id("item-carrito").get_by_role("link").nth(0)).to_have_text("Kubernetes Cluster Overview", timeout=15000), "Verifies the template title appears in the cart."
+        # Assert: Verifies the cart contains the template titled 'Kubernetes Cluster Overview'.
+        await expect(page.get_by_test_id("item-carrito").get_by_role("link").nth(0)).to_have_text("Kubernetes Cluster Overview", timeout=15000), "Verifies the cart contains the template titled 'Kubernetes Cluster Overview'."
         await asyncio.sleep(5)
 
     finally:

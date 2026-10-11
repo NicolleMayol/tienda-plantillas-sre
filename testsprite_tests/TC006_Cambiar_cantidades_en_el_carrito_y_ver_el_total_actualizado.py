@@ -40,17 +40,17 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Agregar al carrito' button on the Kubernetes Cluster Overview card, then click the 'Carrito' link in the header to open the cart.
+        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview' and then click the 'Carrito' link to open the cart page.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Agregar al carrito' button on the Kubernetes Cluster Overview card, then click the 'Carrito' link in the header to open the cart.
+        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview' and then click the 'Carrito' link to open the cart page.
         # Carrito ( 0 ) link
-        elem = page.get_by_role("link", name="Carrito, 1 artículos")
+        elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
-        # -> Set the 'Cantidad' field for Kubernetes Cluster Overview to 3 and verify the cart total updates to $45.00.
+        # -> Change the 'Cantidad' field for 'Kubernetes Cluster Overview' from 1 to 3 and verify the page updates.
         # Cantidad de Kubernetes Cluster Overview number field
         elem = page.get_by_test_id("input-cantidad")
         await elem.wait_for(state="visible", timeout=10000)
@@ -58,10 +58,10 @@ async def run_test():
         
         # --> Assertions to verify final state
         
-        # --> La cantidad del artículo 'Kubernetes Cluster Overview' se actualizó a 3.
+        # --> El campo 'Cantidad' para 'Kubernetes Cluster Overview' se actualizó y muestra 3.
         # Assert-outcome: passed
-        # Assert: El campo 'Cantidad' muestra el valor 3.
-        await expect(page.get_by_test_id("input-cantidad").nth(0)).to_have_value("3", timeout=15000), "El campo 'Cantidad' muestra el valor 3."
+        # Assert: Verifica que el campo Cantidad muestre '3'.
+        await expect(page.get_by_test_id("input-cantidad").nth(0)).to_have_value("3", timeout=15000), "Verifica que el campo Cantidad muestre '3'."
         await asyncio.sleep(5)
 
     finally:
