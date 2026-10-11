@@ -1,0 +1,36 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "targets": [{ "expr": "slo:burn_rate:1h", "refId": "A" }],
+      "title": "Burn rate 1h",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "targets": [{ "expr": "slo:error_budget_remaining", "refId": "A" }],
+      "title": "Error budget restante",
+      "type": "gauge"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["slo", "sre"],
+  "templating": { "list": [] },
+  "time": { "from": "now-6h", "to": "now" },
+  "timezone": "browser",
+  "title": "SLO Burn Rate",
+  "uid": "slo-burn-rate",
+  "version": 1
+}
