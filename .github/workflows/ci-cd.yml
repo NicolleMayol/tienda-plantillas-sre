@@ -46,7 +46,12 @@ jobs:
       - run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
       - id: deploy
         run: echo "url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})" >> "$GITHUB_OUTPUT"
+      # La URL propia de cada despliegue está protegida por Vercel Authentication;
+      # el dominio de producción es público, así que la prueba de humo va contra él.
       - name: Prueba de humo
+        env:
+          URL_PRODUCCION: https://tienda-plantillas-sre.vercel.app
         run: |
-          curl -fsS --retry 5 --retry-delay 5 "${{ steps.deploy.outputs.url }}/api/health"
-          curl -fsS "${{ steps.deploy.outputs.url }}/" | grep -q "Plantillas"
+          echo "Desplegado en ${{ steps.deploy.outputs.url }}"
+          curl -fsS --retry 5 --retry-delay 5 "$URL_PRODUCCION/api/health"
+          curl -fsS "$URL_PRODUCCION/" | grep -q "Plantillas"
