@@ -15,7 +15,7 @@ export function Encabezado() {
         <Link
           href="/carrito"
           className="rounded-md border border-emerald-700 px-3 py-1.5 text-sm text-emerald-100 hover:bg-emerald-950"
-          aria-label={`Carrito, ${totalUnidades} artículos`}
+          aria-label={`Carrito, ${totalUnidades} ${totalUnidades === 1 ? "artículo" : "artículos"}`}
         >
           Carrito{" "}
           <span data-testid="contador-carrito" className="font-mono">
