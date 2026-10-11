@@ -40,30 +40,27 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' product, then click the 'Carrito' button in the header to open the cart.
+        # -> Click the 'Agregar Kubernetes Cluster Overview al carrito' button, then click the 'Carrito' button to open the cart and inspect its contents.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' product, then click the 'Carrito' button in the header to open the cart.
+        # -> Click the 'Agregar Kubernetes Cluster Overview al carrito' button, then click the 'Carrito' button to open the cart and inspect its contents.
         # Carrito ( 0 ) link
         elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Quitar' button on the 'Kubernetes Cluster Overview' cart item to remove it.
+        # -> Click the 'Quitar' button to remove the 'Kubernetes Cluster Overview' item from the cart.
         # Quitar button
         elem = page.get_by_test_id("btn-quitar")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> The cart is empty and shows the empty-state message 'Tu carrito está vacío'.
+        # --> The site-level cart indicator shows zero items (cart is empty).
         # Assert-outcome: passed
-        # Assert: Header cart indicator shows 0 items.
-        await expect(page.get_by_label("Carrito, 0 artículos").nth(0)).to_contain_text("0", timeout=15000), "Header cart indicator shows 0 items."
-        # Assert-outcome: passed
-        # Assert: The checkout button labeled 'Pagar con Stripe' is present on the cart page.
-        await expect(page.get_by_test_id("btn-pagar").nth(0)).to_have_text("Pagar con Stripe", timeout=15000), "The checkout button labeled 'Pagar con Stripe' is present on the cart page."
+        # Assert: Top-right cart button aria-label is 'Carrito, 0 artículos'.
+        await expect(page.get_by_role("link", name="Carrito, 0 artículos").nth(0)).to_have_attribute("aria-label", "Carrito, 0 art\u00edculos", timeout=15000), "Top-right cart button aria-label is 'Carrito, 0 art\u00edculos'."
         await asyncio.sleep(5)
 
     finally:

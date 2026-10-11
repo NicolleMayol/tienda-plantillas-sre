@@ -40,27 +40,27 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' card to add that template to the cart.
+        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview'.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
-        # -> Open the cart by clicking the 'Carrito' button in the header.
+        # -> Click the 'Carrito' link (top-right labeled 'Carrito') to open the cart and view its contents.
         # Carrito ( 1 ) link
         elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> Header cart counter shows 1 item.
+        # --> The header cart link indicates there is 1 item in the cart.
         # Assert-outcome: passed
-        # Assert: Header cart aria-label equals 'Carrito, 1 artículo'.
-        await expect(page.get_by_role("link", name="Carrito, 1 artículo").nth(0)).to_have_attribute("aria-label", "Carrito, 1 art\u00edculo", timeout=15000), "Header cart aria-label equals 'Carrito, 1 art\u00edculo'."
+        # Assert: The cart link's aria-label shows 'Carrito, 1 artículo'.
+        await expect(page.get_by_role("link", name="Carrito, 1 artículo").nth(0)).to_have_attribute("aria-label", "Carrito, 1 art\u00edculo", timeout=15000), "The cart link's aria-label shows 'Carrito, 1 art\u00edculo'."
         
-        # --> The cart page lists the 'Kubernetes Cluster Overview' template.
+        # --> The cart page contains the added template 'Kubernetes Cluster Overview'.
         # Assert-outcome: passed
-        # Assert: Cart contains an item named 'Kubernetes Cluster Overview'.
-        await expect(page.get_by_test_id("item-carrito").get_by_role("link").nth(0)).to_have_text("Kubernetes Cluster Overview", timeout=15000), "Cart contains an item named 'Kubernetes Cluster Overview'."
+        # Assert: The cart displays the item name 'Kubernetes Cluster Overview'.
+        await expect(page.get_by_test_id("item-carrito").get_by_role("link").nth(0)).to_have_text("Kubernetes Cluster Overview", timeout=15000), "The cart displays the item name 'Kubernetes Cluster Overview'."
         await asyncio.sleep(5)
 
     finally:

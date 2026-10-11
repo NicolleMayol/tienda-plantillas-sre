@@ -1,8 +1,8 @@
 [
   {
     "id": "TC001",
-    "title": "Completar la confirmación de pago con sesión válida",
-    "description": "Verifica que la página de éxito con una sesión válida confirme el pago, vacíe el carrito y muestre enlaces de descarga.",
+    "title": "Pago aprobado con 4242 muestra Pago confirmado, total y descarga",
+    "description": "Real checkout with approved card 4242 4242 4242 4242 must land on the success page with confirmation, total and download link. Use stable locators only (data-testid or role + accessible name); no absolute XPath and no Stripe CSS classes.",
     "category": "Confirmación de pago",
     "steps": [
       {
@@ -11,60 +11,76 @@
       },
       {
         "type": "action",
-        "description": "Add a template to the cart"
+        "description": "Click the button with data-testid=btn-agregar on the card for 'Kubernetes Cluster Overview' (data-testid=tarjeta-plantilla)"
       },
       {
         "type": "action",
-        "description": "Start the checkout flow from the cart"
+        "description": "Navigate to /carrito and click the button with data-testid=btn-pagar (accessible name 'Pagar con Stripe')"
       },
       {
         "type": "action",
-        "description": "Complete the checkout flow and return to the success page with a valid session"
+        "description": "On the hosted Stripe Checkout page fill email test@example.com, card number 4242 4242 4242 4242, expiry 12 / 34, CVC 123, cardholder name 'Test User', then submit the payment"
       },
       {
         "type": "assertion",
-        "description": "Verify a payment confirmation is visible"
+        "description": "Verify the URL contains /exito?session_id="
       },
       {
         "type": "assertion",
-        "description": "Verify download links are displayed"
+        "description": "Verify the element data-testid=mensaje-exito is visible and contains the text 'Pago confirmado'"
       },
       {
         "type": "assertion",
-        "description": "Verify the cart is empty"
+        "description": "Verify the page shows 'Total: $15.00'"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a link whose accessible name starts with 'Descargar' (e.g. 'Descargar Kubernetes Cluster Overview') is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Navigate to /carrito and verify data-testid=contador-carrito shows '(0)'"
       }
     ],
     "priority": "High"
   },
   {
     "id": "TC002",
-    "title": "Completar la compra y llegar a la página de éxito",
-    "description": "Verifies that a buyer can start checkout from the cart and, after a successful Stripe Checkout flow, reach the success page with a confirmed payment state.",
+    "title": "Compra completa con 4242 y verificación de la página de éxito",
+    "description": "Complete a real purchase of one template and verify the success page content. Use stable locators only (data-testid or role + accessible name); no absolute XPath and no Stripe CSS classes.",
     "category": "Pago con Stripe Checkout",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to /carrito"
+        "description": "Navigate to /"
       },
       {
         "type": "action",
-        "description": "Add a template to the cart if needed"
+        "description": "Click the button with data-testid=btn-agregar on the card for 'Kubernetes Cluster Overview' (data-testid=tarjeta-plantilla)"
       },
       {
         "type": "action",
-        "description": "Start checkout"
+        "description": "Navigate to /carrito and click the button with data-testid=btn-pagar (accessible name 'Pagar con Stripe')"
       },
       {
         "type": "action",
-        "description": "Complete the payment flow in Stripe Checkout"
+        "description": "On the hosted Stripe Checkout page fill email test@example.com, card number 4242 4242 4242 4242, expiry 12 / 34, CVC 123, cardholder name 'Test User', then submit the payment"
       },
       {
         "type": "assertion",
-        "description": "Verify the success page is displayed"
+        "description": "Verify the URL contains /exito?session_id="
       },
       {
         "type": "assertion",
-        "description": "Verify a payment confirmation message is visible"
+        "description": "Verify the element data-testid=mensaje-exito is visible and contains the text 'Pago confirmado'"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the page shows 'Total: $15.00'"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a link whose accessible name starts with 'Descargar' (e.g. 'Descargar Kubernetes Cluster Overview') is visible"
       }
     ],
     "priority": "High"
@@ -100,8 +116,8 @@
   },
   {
     "id": "TC004",
-    "title": "Explorar categorías y agregar una plantilla desde el catálogo",
-    "description": "Verifica que un visitante pueda filtrar el catálogo por categoría y agregar una plantilla al carrito desde la vista principal.",
+    "title": "Filtrar por Kubernetes y agregar una plantilla",
+    "description": "Select the Kubernetes category for real, verify only Kubernetes templates are shown, add exactly one and verify the cart counter. Use stable locators only (data-testid or role + accessible name); no absolute XPath and no Stripe CSS classes.",
     "category": "Catálogo y filtro por categoría",
     "steps": [
       {
@@ -110,19 +126,23 @@
       },
       {
         "type": "action",
-        "description": "Select a category in the category filter"
+        "description": "Select the option 'Kubernetes' in the select with data-testid=filtro-categoria"
       },
       {
         "type": "assertion",
-        "description": "Verify the catalog updates to show only templates from the selected category"
+        "description": "Verify every card with data-testid=tarjeta-plantilla shows category 'Kubernetes' and that 'Kubernetes Cluster Overview' and 'NGINX Ingress' are visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify cards for 'PostgreSQL Health', 'Node Exporter Full', 'SLO Burn Rate' and 'Blackbox Probes' are NOT visible"
       },
       {
         "type": "action",
-        "description": "Click add to cart on a template card"
+        "description": "Click btn-agregar on exactly ONE card (Kubernetes Cluster Overview)"
       },
       {
         "type": "assertion",
-        "description": "Verify the cart counter increases"
+        "description": "Verify data-testid=contador-carrito contains '(1)' and the header link reads 'Carrito (1)'"
       }
     ],
     "priority": "High"
@@ -130,7 +150,7 @@
   {
     "id": "TC005",
     "title": "Ajustar cantidades y ver el total del carrito",
-    "description": "Verifies that a buyer can change item quantities in the cart and see the total update accordingly.",
+    "description": "Verify the numeric total in data-testid=total-carrito after changing quantity (not only the quantity). Use stable locators only (data-testid or role + accessible name); no absolute XPath and no Stripe CSS classes.",
     "category": "Pago con Stripe Checkout",
     "steps": [
       {
@@ -139,23 +159,27 @@
       },
       {
         "type": "action",
-        "description": "Add a template to the cart"
+        "description": "Click btn-agregar on 'Kubernetes Cluster Overview' (price $15.00)"
       },
       {
         "type": "action",
-        "description": "Open the cart"
+        "description": "Navigate to /carrito"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify data-testid=total-carrito contains 'Total: $15.00'"
       },
       {
         "type": "action",
-        "description": "Increase the quantity of the item"
+        "description": "Set the input data-testid=input-cantidad to 3"
       },
       {
         "type": "assertion",
-        "description": "Verify the cart total is updated"
+        "description": "Verify data-testid=input-cantidad has value 3"
       },
       {
         "type": "assertion",
-        "description": "Verify the cart counter reflects the quantity change"
+        "description": "Verify data-testid=total-carrito contains 'Total: $45.00'"
       }
     ],
     "priority": "High"
@@ -163,7 +187,7 @@
   {
     "id": "TC006",
     "title": "Cambiar cantidades en el carrito y ver el total actualizado",
-    "description": "Verifica que el usuario pueda ajustar cantidades dentro del rango permitido y que el total se actualice en consecuencia.",
+    "description": "Verify the numeric total in data-testid=total-carrito after changing quantity (not only the quantity). Use stable locators only (data-testid or role + accessible name); no absolute XPath and no Stripe CSS classes.",
     "category": "Carrito",
     "steps": [
       {
@@ -172,23 +196,27 @@
       },
       {
         "type": "action",
-        "description": "Add a template to the cart"
+        "description": "Click btn-agregar on 'Kubernetes Cluster Overview' (price $15.00)"
       },
       {
         "type": "action",
-        "description": "Click the cart link"
+        "description": "Navigate to /carrito"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify data-testid=total-carrito contains 'Total: $15.00'"
       },
       {
         "type": "action",
-        "description": "Change the quantity of an item to a different valid value"
+        "description": "Set the input data-testid=input-cantidad to 2"
       },
       {
         "type": "assertion",
-        "description": "Verify the item quantity is updated"
+        "description": "Verify data-testid=input-cantidad has value 2"
       },
       {
         "type": "assertion",
-        "description": "Verify the cart total changes"
+        "description": "Verify data-testid=total-carrito contains 'Total: $30.00'"
       }
     ],
     "priority": "High"
@@ -352,21 +380,37 @@
   },
   {
     "id": "TC012",
-    "title": "Ver una confirmación válida y acceder a las descargas",
-    "description": "Verifies that a valid paid session on the success page shows confirmation, the purchased total, and downloadable files.",
+    "title": "Checkout real con 4242 y enlaces de descarga",
+    "description": "Reach /exito through a real checkout with 4242 (no invented session_id) and verify confirmation and download links. Use stable locators only (data-testid or role + accessible name); no absolute XPath and no Stripe CSS classes.",
     "category": "Confirmación de pago",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to /exito with a valid paid session identifier"
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Click the button with data-testid=btn-agregar on the card for 'Kubernetes Cluster Overview' (data-testid=tarjeta-plantilla)"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /carrito and click the button with data-testid=btn-pagar (accessible name 'Pagar con Stripe')"
+      },
+      {
+        "type": "action",
+        "description": "On the hosted Stripe Checkout page fill email test@example.com, card number 4242 4242 4242 4242, expiry 12 / 34, CVC 123, cardholder name 'Test User', then submit the payment"
       },
       {
         "type": "assertion",
-        "description": "Verify a payment confirmation message is visible"
+        "description": "Verify the URL contains /exito?session_id= with a real session id"
       },
       {
         "type": "assertion",
-        "description": "Verify downloadable links are displayed"
+        "description": "Verify data-testid=mensaje-exito contains 'Pago confirmado'"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify at least one link whose accessible name starts with 'Descargar' is visible and has a href ending in '.json'"
       }
     ],
     "priority": "High"
@@ -464,9 +508,9 @@
   },
   {
     "id": "TC016",
-    "title": "Mantener el carrito persistente al navegar entre páginas",
-    "description": "Verifies that cart contents and the cart counter remain available while moving between catalog, detail, and cart pages.",
-    "category": "Pago con Stripe Checkout",
+    "title": "Tarjeta rechazada no redirige a /exito",
+    "description": "Declined card 4000 0000 0000 0002: Stripe shows an error and the app does not reach /exito. Use stable locators only (data-testid or role + accessible name); no absolute XPath and no Stripe CSS classes.",
+    "category": "Pago con Stripe",
     "steps": [
       {
         "type": "action",
@@ -474,36 +518,32 @@
       },
       {
         "type": "action",
-        "description": "Add a template to the cart"
+        "description": "Click the button with data-testid=btn-agregar on the card for 'Kubernetes Cluster Overview' (data-testid=tarjeta-plantilla)"
       },
       {
         "type": "action",
-        "description": "Click a template card to open its detail page"
+        "description": "Navigate to /carrito and click the button with data-testid=btn-pagar (accessible name 'Pagar con Stripe')"
       },
       {
         "type": "action",
-        "description": "Return to the catalog"
-      },
-      {
-        "type": "action",
-        "description": "Open the cart"
+        "description": "On the hosted Stripe Checkout page fill email test@example.com, card number 4000 0000 0000 0002, expiry 12 / 34, CVC 123, cardholder name 'Test User', then submit the payment"
       },
       {
         "type": "assertion",
-        "description": "Verify the cart still contains the previously added item"
+        "description": "Verify Stripe Checkout shows a card declined error message (text containing 'declined' or 'rechaz')"
       },
       {
         "type": "assertion",
-        "description": "Verify the cart counter remains updated"
+        "description": "Verify the URL does not contain /exito"
       }
     ],
     "priority": "High"
   },
   {
     "id": "TC017",
-    "title": "Acceder a descargas desde la página de éxito",
-    "description": "Verifica que una compra confirmada muestre enlaces de descarga funcionales desde la página de éxito.",
-    "category": "Confirmación de pago",
+    "title": "3D Secure con 4000 0025 0000 3155 llega a Pago confirmado",
+    "description": "3D Secure card: complete the authentication challenge and reach the confirmed payment page. Use stable locators only (data-testid or role + accessible name); no absolute XPath and no Stripe CSS classes.",
+    "category": "Pago con Stripe",
     "steps": [
       {
         "type": "action",
@@ -511,73 +551,35 @@
       },
       {
         "type": "action",
-        "description": "Add a template to the cart"
+        "description": "Click the button with data-testid=btn-agregar on the card for 'Kubernetes Cluster Overview' (data-testid=tarjeta-plantilla)"
       },
       {
         "type": "action",
-        "description": "Start the checkout flow from the cart"
+        "description": "Navigate to /carrito and click the button with data-testid=btn-pagar (accessible name 'Pagar con Stripe')"
       },
       {
         "type": "action",
-        "description": "Complete the checkout flow and return to the success page with a valid session"
+        "description": "On the hosted Stripe Checkout page fill email test@example.com, card number 4000 0025 0000 3155, expiry 12 / 34, CVC 123, cardholder name 'Test User', then submit the payment"
+      },
+      {
+        "type": "action",
+        "description": "In the Stripe 3D Secure test authentication frame/page click the button that completes authentication (e.g. 'Complete')"
       },
       {
         "type": "assertion",
-        "description": "Verify download links are displayed"
+        "description": "Verify the URL contains /exito?session_id="
       },
       {
         "type": "assertion",
-        "description": "Verify the links correspond to the purchased template files"
+        "description": "Verify data-testid=mensaje-exito contains 'Pago confirmado'"
       }
     ],
-    "priority": "Medium"
+    "priority": "High"
   },
   {
     "id": "TC018",
-    "title": "Ver un carrito vacío y continuar deshabilitado",
-    "description": "Verifica que un carrito sin artículos muestre el estado vacío y no permita iniciar el pago.",
-    "category": "Carrito",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /carrito"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify an empty cart message is displayed"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the checkout action is disabled"
-      }
-    ],
-    "priority": "Medium"
-  },
-  {
-    "id": "TC019",
-    "title": "Ver el estado vacío del carrito y el pago deshabilitado",
-    "description": "Verifies that an empty cart shows no items and keeps the payment action unavailable.",
-    "category": "Pago con Stripe Checkout",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /carrito"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify an empty state message is displayed"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the pay action is disabled"
-      }
-    ],
-    "priority": "Low"
-  },
-  {
-    "id": "TC020",
-    "title": "Mostrar manejo de sesión inválida en la página de éxito",
-    "description": "Verifica que entrar a la página de éxito sin una sesión válida muestre un estado de error o no confirmado y no presente la confirmación de pago.",
+    "title": "/exito sin session_id muestra error de confirmación",
+    "description": "Open /exito without session_id. Use stable locators only (data-testid or role + accessible name); no absolute XPath and no Stripe CSS classes.",
     "category": "Confirmación de pago",
     "steps": [
       {
@@ -586,14 +588,52 @@
       },
       {
         "type": "assertion",
-        "description": "Verify a payment not confirmed state is visible"
+        "description": "Verify data-testid=mensaje-error-pago is visible and contains 'No pudimos confirmar tu pago'"
       },
       {
         "type": "assertion",
-        "description": "Verify download links are not displayed"
+        "description": "Verify the text 'Pago confirmado' is not present"
       }
     ],
-    "priority": "Low"
+    "priority": "High"
+  },
+  {
+    "id": "TC019",
+    "title": "/plantillas/no-existe muestra la página 404",
+    "description": "Open a non-existent template id. Use stable locators only (data-testid or role + accessible name); no absolute XPath and no Stripe CSS classes.",
+    "category": "Detalle de plantilla",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /plantillas/no-existe"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the 404 not-found page is shown (heading or text indicating the page was not found)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no template detail or btn-agregar is shown"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC020",
+    "title": "Descarga directa de la plantilla sin pagar no se entrega",
+    "description": "Without buying anything, request the JSON file directly; downloads must only be available after payment. Use stable locators only (data-testid or role + accessible name); no absolute XPath and no Stripe CSS classes.",
+    "category": "Control de acceso a descargas",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Without adding anything to the cart or paying, open http://localhost:3002/plantillas/kubernetes-cluster-overview.json directly"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response does NOT deliver the template JSON (expected: 404/403 or a not-found/blocked page, and the body must not contain a Grafana dashboard definition)"
+      }
+    ],
+    "priority": "High"
   },
   {
     "id": "TC021",

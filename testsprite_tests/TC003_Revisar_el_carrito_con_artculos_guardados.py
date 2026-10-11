@@ -40,23 +40,25 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview', then click the 'Carrito' link to open the cart page.
+        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' card, then click the 'Carrito' link in the header to open the cart.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview', then click the 'Carrito' link to open the cart page.
+        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' card, then click the 'Carrito' link in the header to open the cart.
         # Carrito ( 0 ) link
         elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> The cart lists the added item 'Kubernetes Cluster Overview'.
-        await page.get_by_role("link", name="Kubernetes Cluster Overview").nth(0).scroll_into_view_if_needed()
+        # --> El carrito muestra el artículo "Kubernetes Cluster Overview" con cantidad 1.
         # Assert-outcome: passed
-        # Assert: The product link for 'Kubernetes Cluster Overview' is visible in the cart.
-        await expect(page.get_by_role("link", name="Kubernetes Cluster Overview").nth(0)).to_be_visible(timeout=15000), "The product link for 'Kubernetes Cluster Overview' is visible in the cart."
+        # Assert: Confirma que el artículo 'Kubernetes Cluster Overview' está visible en el carrito.
+        await expect(page.get_by_test_id("item-carrito").get_by_role("link").nth(0)).to_have_text("Kubernetes Cluster Overview", timeout=15000), "Confirma que el art\u00edculo 'Kubernetes Cluster Overview' est\u00e1 visible en el carrito."
+        # Assert-outcome: passed
+        # Assert: Confirma que la cantidad del artículo en el carrito es 1.
+        await expect(page.get_by_test_id("input-cantidad").nth(0)).to_have_value("1", timeout=15000), "Confirma que la cantidad del art\u00edculo en el carrito es 1."
         await asyncio.sleep(5)
 
     finally:

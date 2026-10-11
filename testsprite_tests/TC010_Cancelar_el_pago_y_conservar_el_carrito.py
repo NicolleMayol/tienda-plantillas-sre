@@ -40,55 +40,55 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the 'Carrito' page by clicking the 'Carrito' link in the header.
+        # -> Click the 'Carrito' link in the header to open the cart page and confirm cart contents.
         # Carrito ( 0 ) link
         elem = page.get_by_role("link", name="Carrito, 0 artículos")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Tienda de Plantillas SRE' link to return to the store homepage and view products.
+        # -> Click the 'Tienda de Plantillas SRE' link to return to the shop home so a template can be added to the cart.
         # Tienda de Plantillas SRE link
         elem = page.get_by_role("link", name="Tienda de Plantillas SRE")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview' and then open the 'Carrito' page.
+        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' product, then open the 'Carrito' page by clicking the 'Carrito' link.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview' and then open the 'Carrito' page.
+        # -> Click the 'Agregar al carrito' button on the 'Kubernetes Cluster Overview' product, then open the 'Carrito' page by clicking the 'Carrito' link.
         # Carrito ( 0 ) link
         elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Pagar con Stripe' button to start Stripe Checkout.
+        # -> Click the 'Pagar con Stripe' button to start the Stripe Checkout flow.
         # Pagar con Stripe button
         elem = page.get_by_test_id("btn-pagar")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Tienda de Plantillas SRE sandbox' back link in the Stripe Checkout header to cancel and return to the merchant.
+        # -> Click the 'Tienda de Plantillas SRE sandbox' back link to leave Stripe Checkout and return to the shop (cancel checkout).
         # Back Tienda de Plantillas SRE sandbox link
         elem = page.get_by_test_id("business-link")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Volver al carrito' button to open the cart page and verify the cart still contains the previously added template.
+        # -> Click the 'Volver al carrito' button to open the cart and confirm the previously added 'Kubernetes Cluster Overview' item and the total (expected $15.00) are still present.
         # Volver al carrito link
         elem = page.get_by_role("link", name="Volver al carrito")
         await elem.click(timeout=10000)
         
         # --> Assertions to verify final state
         
-        # --> After cancelling Stripe Checkout, the site showed the canceled page with the message 'Pago cancelado'.
+        # --> After cancelling Stripe Checkout, the site navigated to the cancelled page ('Pago cancelado').
         # Assert-outcome: passed
-        # Assert: The browser navigated to a URL containing /cancelado, indicating the canceled page.
-        await expect(page).to_have_url(re.compile("/cancelado"), timeout=15000), "The browser navigated to a URL containing /cancelado, indicating the canceled page."
+        # Assert: The browser navigated to the /cancelado URL indicating cancellation.
+        await expect(page).to_have_url(re.compile("/cancelado"), timeout=15000), "The browser navigated to the /cancelado URL indicating cancellation."
         
-        # --> The cart still contains the 'Kubernetes Cluster Overview' item and shows quantity 1.
+        # --> The cart still contains the 'Kubernetes Cluster Overview' item with quantity 1 after cancelling checkout.
         # Assert-outcome: passed
-        # Assert: The cart displays the product name 'Kubernetes Cluster Overview'.
-        await expect(page.get_by_test_id("item-carrito").get_by_role("link").nth(0)).to_have_text("Kubernetes Cluster Overview", timeout=15000), "The cart displays the product name 'Kubernetes Cluster Overview'."
+        # Assert: The cart shows the 'Kubernetes Cluster Overview' product.
+        await expect(page.get_by_test_id("item-carrito").get_by_role("link").nth(0)).to_have_text("Kubernetes Cluster Overview", timeout=15000), "The cart shows the 'Kubernetes Cluster Overview' product."
         # Assert-outcome: passed
-        # Assert: The quantity input for the item shows a value of 1.
-        await expect(page.get_by_test_id("input-cantidad").nth(0)).to_have_value("1", timeout=15000), "The quantity input for the item shows a value of 1."
+        # Assert: The product quantity is 1 in the cart.
+        await expect(page.get_by_test_id("input-cantidad").nth(0)).to_have_value("1", timeout=15000), "The product quantity is 1 in the cart."
         await asyncio.sleep(5)
 
     finally:

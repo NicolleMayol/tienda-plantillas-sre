@@ -40,28 +40,28 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview' and then click the 'Carrito' link to open the cart page.
+        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview' to add the $15.00 item to the cart.
         # Agregar al carrito button
         elem = page.get_by_role("button", name="Agregar Kubernetes Cluster")
         await elem.click(timeout=10000)
         
-        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview' and then click the 'Carrito' link to open the cart page.
+        # -> Click the 'Agregar al carrito' button for 'Kubernetes Cluster Overview' to add the $15.00 item to the cart.
         # Carrito ( 0 ) link
         elem = page.get_by_role("link", name="Carrito, 1 artículo")
         await elem.click(timeout=10000)
         
-        # -> Change the 'Cantidad' field for 'Kubernetes Cluster Overview' from 1 to 3 and verify the page updates.
+        # -> Change the 'Cantidad de Kubernetes Cluster Overview' quantity input to 2 and verify the cart total updates to 'Total: $30.00'.
         # Cantidad de Kubernetes Cluster Overview number field
         elem = page.get_by_test_id("input-cantidad")
         await elem.wait_for(state="visible", timeout=10000)
-        await elem.fill("3")
+        await elem.fill("2")
         
         # --> Assertions to verify final state
         
-        # --> El campo 'Cantidad' para 'Kubernetes Cluster Overview' se actualizó y muestra 3.
+        # --> The quantity input for 'Kubernetes Cluster Overview' is set to 2.
         # Assert-outcome: passed
-        # Assert: Verifica que el campo Cantidad muestre '3'.
-        await expect(page.get_by_test_id("input-cantidad").nth(0)).to_have_value("3", timeout=15000), "Verifica que el campo Cantidad muestre '3'."
+        # Assert: The quantity input shows the value '2'.
+        await expect(page.get_by_test_id("input-cantidad").nth(0)).to_have_value("2", timeout=15000), "The quantity input shows the value '2'."
         await asyncio.sleep(5)
 
     finally:

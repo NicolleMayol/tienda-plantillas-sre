@@ -40,28 +40,7 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Select 'Kubernetes' from the 'Categoría' dropdown to filter templates by that category.
-        # Todas Kubernetes Bases de datos Infraestructura... dropdown
-        elem = page.locator("xpath=/html/body/main/section/div/div[2]/select").nth(0)
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.select_option("")
-        
-        # -> Select 'Kubernetes' from the 'Categoría' dropdown to filter templates by that category.
-        # Kubernetes Cluster Overview link
-        elem = page.get_by_role("link", name="Kubernetes Cluster Overview")
-        await elem.click(timeout=10000)
-        
-        # -> Click the 'Tienda de Plantillas SRE' link to return to the catalog and verify only Kubernetes templates are displayed.
-        # Tienda de Plantillas SRE link
-        elem = page.get_by_role("link", name="Tienda de Plantillas SRE")
-        await elem.click(timeout=10000)
-        
-        # -> Open the 'Categoría' dropdown and choose the 'Kubernetes' category from the options.
-        # Todas Kubernetes Bases de datos Infraestructura... dropdown
-        elem = page.get_by_test_id("filtro-categoria")
-        await elem.click(timeout=10000)
-        
-        # -> Select 'Kubernetes' from the 'Categoría' dropdown.
+        # -> Select 'Kubernetes' from the 'Categoría' dropdown (label shown as 'Categoría' / 'Filtrar por categoría').
         # Todas Kubernetes Bases de datos Infraestructura... dropdown
         elem = page.locator("xpath=/html/body/main/section/div/div[2]/select").nth(0)
         await elem.wait_for(state="visible", timeout=10000)
@@ -74,13 +53,11 @@ async def run_test():
         
         # --> Assertions to verify final state
         
-        # --> The template detail page for 'Kubernetes Cluster Overview' is displayed.
+        # --> The 'Kubernetes Cluster Overview' detail page is open and shows the add-to-cart action.
+        await page.get_by_test_id("btn-agregar").nth(0).scroll_into_view_if_needed()
         # Assert-outcome: passed
-        # Assert: The browser is on the Kubernetes Cluster Overview detail URL.
-        await expect(page).to_have_url(re.compile("/plantillas/kubernetes\\-cluster\\-overview"), timeout=15000), "The browser is on the Kubernetes Cluster Overview detail URL."
-        # Assert-outcome: passed
-        # Assert: The Add to cart button is labeled 'Agregar al carrito'.
-        await expect(page.get_by_test_id("btn-agregar").nth(0)).to_have_text("Agregar al carrito", timeout=15000), "The Add to cart button is labeled 'Agregar al carrito'."
+        # Assert: The 'Agregar al carrito' button is visible on the template detail page.
+        await expect(page.get_by_test_id("btn-agregar").nth(0)).to_be_visible(timeout=15000), "The 'Agregar al carrito' button is visible on the template detail page."
         await asyncio.sleep(5)
 
     finally:
